@@ -8,7 +8,7 @@ actions:
     # Build release-quality artifacts in offine mode. Deps must've been downloaded before.
     - cargo_build:
         command: |
-            cargo build --target %(rust_host_platform) --release --offline
+            cargo build --target %(rust_host_platform) --release --offline -j %(jobs)
 
     # NOTE: There is no `cargo_install` command, because it's not a
     # `make install` equivalent. It' supposed to install artifacts into
@@ -17,4 +17,4 @@ actions:
     # Test the release-quality artifacts.
     - cargo_check:
         command: |
-            cargo test --target %(rust_host_platform) --release --offline
+            cargo test --target %(rust_host_platform) --release --offline -j %(jobs) -- --test-threads=%(jobs)
