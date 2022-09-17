@@ -248,6 +248,9 @@ private:
             /* Reject libtool (.la) files */
             AnalysisChain("libtoolFiles", [&rejectLibToolFiles], 90),
 
+            /* Automatically compress any man pages with zstd */
+            AnalysisChain("compressManPages", [&compressManPages], 90),
+
             /* Handle ELF files */
             /* FIXME: Parallel debuginfo handling truncates hardlinked files! */
             AnalysisChain("elves", [
@@ -461,6 +464,55 @@ private:
         instance.collectPath(debugInfoPath, instance.profiles[0].installRoot);
 
         return AnalysisReturn.NextFunction;
+    }
+
+    static AnalysisReturn compressManPages(scope Analyser analyser, ref FileInfo fileInfo)
+    {
+        import std.file;
+        import std.stdio: toFile;
+        import std.string : format;
+        import zstd;
+
+        auto filename = fileInfo.path;
+        auto instance = analyser.userdata!Builder;
+
+        /* Find a man page file */
+        if (filename.canFind("man") && filename.endsWith("1", "2", "3", "4", "5", "6", "7", "8", "9"))
+        {
+            /* Already compressed */
+            if (filename.endsWith(".gz", ".bz2", ".lz", ".zst", ".xz"))
+            {
+                return AnalysisReturn.NextHandler;
+            }
+
+            /* We have a symlink file, update it to point to the compressed file */
+            // FIXME: Not tested
+            if ((fileInfo.type == FileType.Symlink) && (fileInfo.type != FileType.Directory))
+            {
+                auto actualpath = std.file.readLink(fileInfo.path);
+                std.file.symlink(format!"%s.zst"(actualpath), format!"%s.zst"(fileInfo.path));
+                instance.collectPath(format!"%s.zst"(fileInfo.fullPath), instance.profiles[0].installRoot);
+                // HACK: return ignorefile to drop the old link
+                return AnalysisReturn.IgnoreFile;
+            }
+
+            auto manfile = std.file.read(fileInfo.fullPath);
+
+            // Compress it in memory
+            auto compressedmanfile = compress(manfile, 19);
+            info(format!"[Man] Compressing: %s. Original size: %s Compressed size: %s"(fileInfo.path, manfile.length, compressedmanfile.length));
+
+            // Write the compressed file to disk
+            File f = File(format!"%s.zst"(fileInfo.fullPath), "w");
+            f.rawWrite(compressedmanfile);
+
+            // Ensure it's collected into the manifest
+            instance.collectPath(format!"%s.zst"(fileInfo.fullPath), instance.profiles[0].installRoot);
+
+            // HACK: Remove the original pre-compressed file.
+            return AnalysisReturn.IgnoreFile;
+        }
+        return AnalysisReturn.NextHandler;
     }
 
     /**
