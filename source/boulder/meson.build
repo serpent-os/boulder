@@ -3,6 +3,7 @@
 boulder_sources = [
     'cli/package.d',
     'cli/new_command.d',
+    'cli/update_command.d',
     'cli/version_command.d',
     'cli/build_command.d',
     'buildjob.d',

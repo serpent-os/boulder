@@ -33,6 +33,7 @@ int boulderMain(string[] args)
     auto clip = cliProcessor!BoulderCLI(args);
     clip.addCommand!BuildControlCommand;
     clip.addCommand!NewCommand;
+    clip.addCommand!UpdateCommand;
     clip.addCommand!VersionCommand;
     clip.addCommand!HelpCommand;
     return clip.process(args);
