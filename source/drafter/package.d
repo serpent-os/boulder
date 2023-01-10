@@ -83,13 +83,14 @@ public final class Drafter
         analyser.addChain(mesonChain);
         analyser.addChain(cmakeChain);
         analyser.addChain(pythonChain);
+        analyser.addChain(cargoChain);
         analyser.addChain(licenseChain);
         controller.onFail.connect(&onFail);
         controller.onComplete.connect(&onComplete);
         _licenseEngine = new Engine();
 
         auto licenseDir = thisExePath.dirName.buildNormalizedPath("..",
-                "share", "boulder", "licenses").absolutePath;
+            "share", "boulder", "licenses").absolutePath;
         _licenseEngine.loadFromDirectory(licenseDir);
         _licenses = new RedBlackTree!(string, "a < b", false);
         outputFile = File(outputPath, "w");

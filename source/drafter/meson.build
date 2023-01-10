@@ -5,6 +5,7 @@ libdrafter_sources = [
     'build/meson.d',
     'build/package.d',
     'build/python.d',
+    'build/rust.d',
     'license/engine.d',
     'license/package.d',
     'metadata/basic.d',

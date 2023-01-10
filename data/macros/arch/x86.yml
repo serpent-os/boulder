@@ -10,6 +10,7 @@ definitions:
     - cpp            : "%(compiler_cpp) -m32"
     - march          : x86-64-v2
     - mtune          : ivybridge
+    - rust_host_platform : "i686-unknown-linux-gnu"
 
 flags:
 

@@ -19,6 +19,7 @@ public import drafter.build.autotools;
 public import drafter.build.cmake;
 public import drafter.build.meson;
 public import drafter.build.python;
+public import drafter.build.rust;
 
 import std.traits : EnumMembers;
 import std.string : capitalize;
@@ -77,6 +78,11 @@ public enum BuildType : string
      * Uses python setuptools
      */
     PythonSetuptools = "PythonSetuptools",
+
+    /**
+     * Uses cargo.
+     */
+    Cargo = "cargo",
 
     /**
      * Unsupported tooling
