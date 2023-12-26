@@ -327,6 +327,9 @@ private:
                 &acceptCmakeFiles, &handleCmakeFiles, &includeFile
             ], 50),
 
+            /* Compress man and info pages if enabled */
+            AnalysisChain("compressman", [&acceptManInfoPages, &compressPage], 40),
+
             /* Default inclusion policy */
             AnalysisChain("default", [&includeFile], 0),
         ];

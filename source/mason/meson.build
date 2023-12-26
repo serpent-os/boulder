@@ -4,6 +4,7 @@ libmason_sources = [
     'package.d',
     'build/analysers/binary.d',
     'build/analysers/cmake.d',
+    'build/analysers/compressman.d',
     'build/analysers/elves.d',
     'build/analysers/package.d',
     'build/analysers/pkgconfig.d',
