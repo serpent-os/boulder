@@ -36,6 +36,7 @@ int boulderMain(string[] args)
     clip.addCommand!ChrootCommand;
     clip.addCommand!DeleteCacheCommand;
     clip.addCommand!NewCommand;
+    clip.addCommand!UpdateCommand;
     clip.addCommand!VersionCommand;
     clip.addCommand!HelpCommand;
     return clip.process(args);

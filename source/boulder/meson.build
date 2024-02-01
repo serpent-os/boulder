@@ -6,6 +6,7 @@ boulder_sources = [
     'cli/chroot_command.d',
     'cli/deletecache_command.d',
     'cli/new_command.d',
+    'cli/update_command.d',
     'cli/version_command.d',
     'buildjob.d',
     'controller.d',
